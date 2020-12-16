@@ -1,5 +1,6 @@
 package com.jackwesley.cursospringboot.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jackwesley.cursospringboot.domain.enums.TipoCliente;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Cliente implements Serializable {
 
     private Integer tipo;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> ederecos = new ArrayList<>();
 
