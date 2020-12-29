@@ -1,5 +1,6 @@
 package com.jackwesley.cursospringboot.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jackwesley.cursospringboot.domain.enums.EstadoPagamento;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public abstract class Pagamento implements Serializable {
 
     private Integer estadoPagamento;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name="pedido_id")
     @MapsId
