@@ -2,8 +2,10 @@ package com.jackwesley.cursospringboot.services;
 
 import com.jackwesley.cursospringboot.domain.Categoria;
 import com.jackwesley.cursospringboot.repositories.CategoriaRepository;
+import com.jackwesley.cursospringboot.services.exceptions.DataIntegrityException;
 import com.jackwesley.cursospringboot.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -31,7 +33,17 @@ public class CategoriaService {
 
     public Categoria update(Categoria categoria){
         findById(categoria.getId());
-
         return categoriaRepository.save(categoria);
+    }
+
+    public void delete(Integer id){
+        findById(id);
+        try{
+            categoriaRepository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException exception){
+            throw new DataIntegrityException("Não é possível excluir categoria associada a produtos");
+        }
+
     }
 }
