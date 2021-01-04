@@ -4,6 +4,7 @@ import com.jackwesley.cursospringboot.domain.Categoria;
 import com.jackwesley.cursospringboot.dto.CategoriaDTO;
 import com.jackwesley.cursospringboot.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,6 +37,21 @@ public class CategoriaResource {
         List<CategoriaDTO> categoriasDto = categorias.stream()
                 .map(categoria -> new CategoriaDTO(categoria))
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(categoriasDto);
+    }
+
+    @RequestMapping(value= "/page",method = RequestMethod.GET)
+    public ResponseEntity<Page<CategoriaDTO>> findPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "24")Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "nome")String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC")String direction){
+
+        Page<Categoria> categorias = categoriaService.findPage(page, linesPerPage, orderBy,direction);
+
+        Page<CategoriaDTO> categoriasDto = categorias
+                .map(categoria -> new CategoriaDTO(categoria));
 
         return ResponseEntity.ok().body(categoriasDto);
     }
